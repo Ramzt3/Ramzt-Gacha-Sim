@@ -1,4 +1,4 @@
-from .router import characters, elements
+from .router import characters, elements, paths
 from fastapi import FastAPI
 from . import models
 from .database import engine
@@ -9,6 +9,7 @@ app = FastAPI()
 
 app.include_router(characters.router)
 app.include_router(elements.router)
+app.include_router(paths.router)
 
 @app.get("/")
 def read_root():

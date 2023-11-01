@@ -30,7 +30,7 @@ def create_char(data: schemas.CharacterCreate, db: Session = Depends(get_db)):
 def remove_char(id: int, db: Session = Depends(get_db)):
     char = db.query(models.Character).filter(models.Character.id == id)
     if not char.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Character does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Character with id:{id} does not exist")
 
     char.delete(synchronize_session=False)
     db.commit()
@@ -38,10 +38,10 @@ def remove_char(id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.put("/{id}", status_code=status.HTTP_200_OK)
-def edit_elem(id: int, data: schemas.CharacterBase, db: Session = Depends(get_db)):
+def edit_char(id: int, data: schemas.CharacterBase, db: Session = Depends(get_db)):
     char = db.query(models.Character).filter(models.Character.id == id)
     if not char.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Element does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Character with id:{id} does not exist")
 
     char.update(data.model_dump(), synchronize_session=False)
     db.commit()

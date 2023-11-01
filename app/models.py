@@ -23,3 +23,11 @@ class Element(Base):
     name = Column(String, nullable=False)
     icon = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("NOW()"))
+
+class Path(Base):
+    __tablename__ = "paths"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    icon = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text("NOW()"))

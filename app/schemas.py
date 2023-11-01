@@ -27,3 +27,15 @@ class ElementCreate(ElementBase):
 class ElementRes(ElementBase):
     id: int
     created_at: datetime
+
+
+class PathBase(BaseModel):
+    name: str
+    icon: str
+
+class PathCreate(PathBase):
+    pass
+
+class PathRes(PathBase):
+    id: int
+    created_at: datetime

@@ -30,7 +30,7 @@ def create_elem(data: schemas.ElementCreate, db: Session = Depends(get_db)):
 def remove_elem(id: int,db: Session = Depends(get_db)):
     elem = db.query(models.Element).filter(models.Element.id == id)
     if not elem.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Element does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Element with id:{id} does not exist")
 
     elem.delete(synchronize_session=False)
     db.commit()
@@ -41,7 +41,7 @@ def remove_elem(id: int,db: Session = Depends(get_db)):
 def edit_elem(id: int, data: schemas.ElementBase, db: Session = Depends(get_db)):
     elem = db.query(models.Element).filter(models.Element.id == id)
     if not elem.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Element does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Element with id:{id} does not exist")
 
     elem.update(data.model_dump(), synchronize_session=False)
     db.commit()
