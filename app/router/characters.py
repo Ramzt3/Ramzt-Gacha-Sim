@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, status, Response, HTTPException, Depends
 from sqlalchemy.orm import Session
 from ..database import get_db
@@ -10,8 +10,8 @@ router = APIRouter(
 )
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.CharacterRes])
-def get_char(db: Session = Depends(get_db)):
-    char = db.query(models.Character).all()
+def get_char(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
+    char = db.query(models.Character).filter(models.Character.name.contains(search)).limit(limit).offset(skip).all()
     if not char:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Character does not exist")
     
