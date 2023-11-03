@@ -14,10 +14,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:5173",
-    "13.228.225.19",
-    "18.142.128.26",
-    "54.254.162.138",
-    "183.182.99.48"
+    "http://localhost:5174",
 ]
 
 app.add_middleware(
