@@ -11,10 +11,18 @@ router = APIRouter(
 )
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.PathRes])
-def get_path(db: Session = Depends(get_db)):
+def get_paths(db: Session = Depends(get_db)):
     path = db.query(models.Path).all()
     if not path:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Path does not exist")
+    
+    return path
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PathRes)
+def get_path(id: int, db: Session = Depends(get_db)):
+    path = db.query(models.Path).filter(models.Path.id == id).first()
+    if not path:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Path with id:{id} does not exist")
     
     return path
 

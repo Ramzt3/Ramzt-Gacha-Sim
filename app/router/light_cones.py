@@ -5,15 +5,23 @@ from ..database import get_db
 from .. import models, schemas
 
 router = APIRouter(
-    prefix="/light_cones",
-    tags=["light_cones"]
+    prefix="/light-cones",
+    tags=["light-cones"]
 )
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.LightConeRes])
-def get_lc(db: Session = Depends(get_db)):
+def get_lcs(db: Session = Depends(get_db)):
     lc = db.query(models.LightCone).all()
     if not lc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Light Cone does not exist")
+    
+    return lc 
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.LightConeRes)
+def get_lc(id: int, db: Session = Depends(get_db)):
+    lc = db.query(models.LightCone).filter(models.LightCone.id == id).first()
+    if not lc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Light Cone with id:{id} does not exist")
     
     return lc 
 

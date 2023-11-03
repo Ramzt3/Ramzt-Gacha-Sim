@@ -10,12 +10,20 @@ router = APIRouter(
 )
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.ElementRes])
-def get_elem(db: Session = Depends(get_db)):
+def get_elems(db: Session = Depends(get_db)):
     element = db.query(models.Element).all()
     if not element:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Elements does not exist")
     
     return element
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.ElementRes)
+def get_elem(id: int, db: Session = Depends(get_db)):
+    elem = db.query(models.Element).filter(models.Element.id == id).first()
+    if not elem:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Element with id:{id} does not exist")
+    
+    return elem
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.ElementRes)
 def create_elem(data: schemas.ElementCreate, db: Session = Depends(get_db)):

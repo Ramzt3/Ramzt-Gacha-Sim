@@ -10,10 +10,18 @@ router = APIRouter(
 )
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.CharacterRes])
-def get_char(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
+def get_chars(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     char = db.query(models.Character).filter(models.Character.name.contains(search)).limit(limit).offset(skip).all()
     if not char:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Character does not exist")
+    
+    return char
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.CharacterRes)
+def get_char(id: int, db: Session = Depends(get_db)):
+    char = db.query(models.Character).filter(models.Character.id == id).first()
+    if not char:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Character with id:{id} does not exist")
     
     return char
 
